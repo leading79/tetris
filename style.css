@@ -1,0 +1,430 @@
+:root {
+    /* Base theme colors */
+    --color-bg-dark: #080811;
+    --color-bg-panel: rgba(18, 18, 35, 0.45);
+    --color-border-glass: rgba(255, 255, 255, 0.07);
+    --color-border-active: rgba(255, 255, 255, 0.15);
+    
+    /* Typography */
+    --font-main: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+    --font-display: 'Orbitron', sans-serif;
+    
+    /* Neon Colors */
+    --neon-cyan: #00f2fe;
+    --neon-yellow: #ffd000;
+    --neon-purple: #d83aff;
+    --neon-green: #00ff87;
+    --neon-red: #ff3860;
+    --neon-blue: #0066ff;
+    --neon-orange: #ff9f43;
+    --neon-magenta: #ff007f;
+    
+    /* Neon Glows */
+    --glow-cyan: 0 0 15px rgba(0, 242, 254, 0.6);
+    --glow-yellow: 0 0 15px rgba(255, 208, 0, 0.6);
+    --glow-purple: 0 0 15px rgba(216, 58, 255, 0.6);
+    --glow-green: 0 0 15px rgba(0, 255, 135, 0.6);
+    --glow-red: 0 0 15px rgba(255, 56, 96, 0.6);
+    --glow-blue: 0 0 15px rgba(0, 102, 255, 0.6);
+    --glow-orange: 0 0 15px rgba(255, 159, 67, 0.6);
+    --glow-magenta: 0 0 15px rgba(255, 0, 127, 0.6);
+}
+
+/* Reset and Base Styles */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    background-color: var(--color-bg-dark);
+    color: #f1f1f6;
+    font-family: var(--font-main);
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow-x: hidden;
+    position: relative;
+}
+
+/* Ambient Drifting Neon Backgrounds */
+.glow-bg {
+    position: fixed;
+    width: 600px;
+    height: 600px;
+    border-radius: 50%;
+    filter: blur(150px);
+    opacity: 0.15;
+    z-index: -1;
+    pointer-events: none;
+    animation: drift 20s infinite alternate ease-in-out;
+}
+
+.glow-cyan {
+    background-color: var(--neon-cyan);
+    top: -100px;
+    left: -100px;
+    animation-delay: 0s;
+}
+
+.glow-magenta {
+    background-color: var(--neon-magenta);
+    bottom: -100px;
+    right: -100px;
+    animation-delay: -5s;
+}
+
+@keyframes drift {
+    0% {
+        transform: translate(0, 0) scale(1);
+    }
+    50% {
+        transform: translate(80px, 50px) scale(1.2);
+    }
+    100% {
+        transform: translate(-40px, 100px) scale(0.9);
+    }
+}
+
+/* Wrapper Layout */
+.game-wrapper {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 20px;
+    width: 100%;
+    max-width: 650px;
+    padding: 20px;
+}
+
+header {
+    text-align: center;
+}
+
+.logo {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 900;
+    letter-spacing: 6px;
+    text-transform: uppercase;
+    text-shadow: var(--glow-cyan);
+    color: #fff;
+}
+
+.neon-text-magenta {
+    color: var(--neon-magenta);
+    text-shadow: var(--glow-magenta);
+}
+
+.neon-text-cyan {
+    color: var(--neon-cyan);
+    text-shadow: var(--glow-cyan);
+}
+
+.neon-text-yellow {
+    color: var(--neon-yellow);
+    text-shadow: var(--glow-yellow);
+}
+
+/* Glassmorphism Container */
+.glass-container {
+    background: var(--color-bg-panel);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid var(--color-border-glass);
+    border-radius: 16px;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    transition: border-color 0.3s ease;
+}
+
+.glass-container:hover {
+    border-color: var(--color-border-active);
+}
+
+/* Main Game Layout Grid */
+.game-container {
+    display: grid;
+    grid-template-columns: auto 200px;
+    gap: 20px;
+    width: 100%;
+}
+
+/* Left Area: Board & Overlays */
+.board-area {
+    position: relative;
+    padding: 10px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#game-board {
+    display: block;
+    background-color: rgba(5, 5, 10, 0.85);
+    border-radius: 8px;
+    box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+}
+
+/* Game Screens Overlays */
+.overlay {
+    position: absolute;
+    top: 10px;
+    left: 10px;
+    right: 10px;
+    bottom: 10px;
+    border-radius: 8px;
+    background-color: rgba(8, 8, 17, 0.88);
+    backdrop-filter: blur(8px);
+    -webkit-backdrop-filter: blur(8px);
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    gap: 15px;
+    z-index: 10;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.3s ease;
+    text-align: center;
+    padding: 20px;
+}
+
+.overlay.active {
+    opacity: 1;
+    pointer-events: auto;
+}
+
+.overlay h2 {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    letter-spacing: 2px;
+}
+
+.overlay .description {
+    font-size: 0.9rem;
+    color: #a0a0b0;
+    max-width: 80%;
+    line-height: 1.4;
+}
+
+.glow-animate {
+    animation: text-pulse 2s infinite alternate;
+}
+
+@keyframes text-pulse {
+    0% {
+        text-shadow: 0 0 8px rgba(0, 242, 254, 0.5);
+    }
+    100% {
+        text-shadow: 0 0 20px rgba(0, 242, 254, 0.9), 0 0 30px rgba(0, 242, 254, 0.4);
+    }
+}
+
+/* Neon buttons styling */
+.neon-btn {
+    font-family: var(--font-display);
+    font-size: 0.95rem;
+    font-weight: 700;
+    padding: 12px 28px;
+    border: 2px solid transparent;
+    border-radius: 30px;
+    background: transparent;
+    cursor: pointer;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    letter-spacing: 2px;
+}
+
+.btn-cyan {
+    color: var(--neon-cyan);
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
+}
+
+.btn-cyan:hover {
+    background: var(--neon-cyan);
+    color: var(--color-bg-dark);
+    box-shadow: var(--glow-cyan);
+    transform: translateY(-2px);
+}
+
+.btn-yellow {
+    color: var(--neon-yellow);
+    border-color: var(--neon-yellow);
+    box-shadow: 0 0 10px rgba(255, 208, 0, 0.2);
+}
+
+.btn-yellow:hover {
+    background: var(--neon-yellow);
+    color: var(--color-bg-dark);
+    box-shadow: var(--glow-yellow);
+    transform: translateY(-2px);
+}
+
+.btn-magenta {
+    color: var(--neon-magenta);
+    border-color: var(--neon-magenta);
+    box-shadow: 0 0 10px rgba(255, 0, 127, 0.2);
+}
+
+.btn-magenta:hover {
+    background: var(--neon-magenta);
+    color: var(--color-bg-dark);
+    box-shadow: var(--glow-magenta);
+    transform: translateY(-2px);
+}
+
+.neon-btn:active {
+    transform: translateY(1px);
+}
+
+.final-stats {
+    margin: 10px 0;
+}
+
+.final-stats p {
+    font-size: 0.75rem;
+    letter-spacing: 2px;
+    color: #a0a0b0;
+}
+
+#final-score {
+    font-family: var(--font-display);
+    font-size: 2.2rem;
+    font-weight: 900;
+    color: #fff;
+    text-shadow: var(--glow-magenta);
+}
+
+/* Right Area: Panels */
+.side-panel-area {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.panel {
+    padding: 15px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
+
+.panel-title {
+    font-family: var(--font-display);
+    font-size: 0.85rem;
+    font-weight: 700;
+    letter-spacing: 3px;
+    color: #8c8c9e;
+    text-align: center;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    padding-bottom: 8px;
+    text-transform: uppercase;
+}
+
+/* Next Block Canvas styling */
+.next-canvas-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 5px;
+}
+
+#next-piece {
+    background-color: rgba(5, 5, 10, 0.5);
+    border-radius: 6px;
+}
+
+/* Stats Styling */
+.stat-box {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 5px;
+    padding: 5px 0;
+}
+
+.stat-label {
+    font-family: var(--font-display);
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 2px;
+    color: #8c8c9e;
+}
+
+.stat-value {
+    font-family: var(--font-display);
+    font-size: 1.6rem;
+    font-weight: 900;
+}
+
+.stat-divider {
+    height: 1px;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.05), transparent);
+}
+
+/* Controls Guide Keyboard styling */
+.controls-guide {
+    font-size: 0.8rem;
+    color: #a0a0b0;
+}
+
+.guide-item {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 8px;
+}
+
+.guide-item:last-child {
+    margin-bottom: 0;
+}
+
+.guide-item span {
+    font-size: 0.75rem;
+}
+
+kbd {
+    background: rgba(255, 255, 255, 0.07);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    border-radius: 4px;
+    padding: 3px 7px;
+    font-family: var(--font-main);
+    font-size: 0.7rem;
+    font-weight: 600;
+    box-shadow: 0 2px 0 rgba(0, 0, 0, 0.3);
+    color: #fff;
+    min-width: 22px;
+    text-align: center;
+}
+
+/* Footer styling */
+footer {
+    font-size: 0.7rem;
+    color: #505060;
+    text-align: center;
+    margin-top: 10px;
+    letter-spacing: 1px;
+}
+
+/* Responsiveness for Smaller Screen Heights/Widths */
+@media (max-width: 600px) {
+    .game-container {
+        grid-template-columns: 1fr;
+        gap: 15px;
+    }
+    
+    .side-panel-area {
+        flex-direction: row;
+        flex-wrap: wrap;
+    }
+    
+    .side-panel-area > div {
+        flex: 1 1 120px;
+    }
+    
+    .controls-guide {
+        display: none; /* Hide keyboard controls map on mobile-ish layouts */
+    }
+}

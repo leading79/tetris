@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>NEON TETRIS</title>
+    <!-- Google Fonts for futuristic neon styling and clean layout -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600&family=Orbitron:wght@500;700;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- Ambient glowing backgrounds for visual depth -->
+    <div class="glow-bg glow-cyan"></div>
+    <div class="glow-bg glow-magenta"></div>
+
+    <div class="game-wrapper">
+        <header>
+            <h1 class="logo">NEON <span class="neon-text-magenta">TETRIS</span></h1>
+        </header>
+
+        <main class="game-container">
+            <!-- Left Side: Game Board inside a glass container -->
+            <div class="board-area glass-container">
+                <canvas id="game-board" width="300" height="600"></canvas>
+                
+                <!-- Game Screens Overlaid on Board Area -->
+                <!-- Start Screen -->
+                <div id="start-screen" class="overlay active">
+                    <h2 class="neon-text-cyan glow-animate">READY PLAYER ONE</h2>
+                    <p class="description">네온 컬러의 화려한 클래식 테트리스</p>
+                    <button id="start-btn" class="neon-btn btn-cyan">GAME START</button>
+                </div>
+
+                <!-- Pause Screen -->
+                <div id="pause-screen" class="overlay">
+                    <h2 class="neon-text-yellow">GAME PAUSED</h2>
+                    <p class="description">일시 정지됨</p>
+                    <button id="resume-btn" class="neon-btn btn-yellow">RESUME</button>
+                </div>
+
+                <!-- Game Over Screen -->
+                <div id="game-over-screen" class="overlay">
+                    <h2 class="neon-text-magenta">GAME OVER</h2>
+                    <div class="final-stats">
+                        <p>FINAL SCORE</p>
+                        <span id="final-score">0</span>
+                    </div>
+                    <button id="restart-btn" class="neon-btn btn-magenta">PLAY AGAIN</button>
+                </div>
+            </div>
+
+            <!-- Right Side: Side Panels -->
+            <div class="side-panel-area">
+                <!-- Next Piece Preview -->
+                <div class="panel glass-container">
+                    <h3 class="panel-title">NEXT</h3>
+                    <div class="next-canvas-container">
+                        <canvas id="next-piece" width="120" height="120"></canvas>
+                    </div>
+                </div>
+
+                <!-- Score and Level Status -->
+                <div class="panel glass-container">
+                    <div class="stat-box">
+                        <span class="stat-label">SCORE</span>
+                        <span id="score-val" class="stat-value neon-text-cyan">0</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-box">
+                        <span class="stat-label">LEVEL</span>
+                        <span id="level-val" class="stat-value neon-text-yellow">1</span>
+                    </div>
+                    <div class="stat-divider"></div>
+                    <div class="stat-box">
+                        <span class="stat-label">LINES</span>
+                        <span id="lines-val" class="stat-value neon-text-magenta">0</span>
+                    </div>
+                </div>
+
+                <!-- Controls Guide -->
+                <div class="panel glass-container controls-guide">
+                    <h3 class="panel-title">CONTROLS</h3>
+                    <div class="guide-item">
+                        <kbd>←</kbd> <kbd>→</kbd> <span>좌우 이동</span>
+                    </div>
+                    <div class="guide-item">
+                        <kbd>↑</kbd> <span>블록 회전</span>
+                    </div>
+                    <div class="guide-item">
+                        <kbd>↓</kbd> <span>소프트 드롭</span>
+                    </div>
+                    <div class="guide-item">
+                        <kbd>Space</kbd> <span>하드 드롭</span>
+                    </div>
+                    <div class="guide-item">
+                        <kbd>P</kbd> or <kbd>Esc</kbd> <span>일시 정지</span>
+                    </div>
+                </div>
+            </div>
+        </main>
+        
+        <footer>
+            <p>Antigravity Neon Tetris © 2026</p>
+        </footer>
+    </div>
+
+    <!-- Deferred Javascript load -->
+    <script src="tetris.js" defer></script>
+</body>
+</html>
