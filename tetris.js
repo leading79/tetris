@@ -818,6 +818,9 @@ if (saveScoreBtn) {
             leaderboardInputArea.style.display = 'none';
         }
         renderLeaderboard(newIdx);
+        
+        // Remove focus from any active elements so that pressing Enter doesn't trigger restart
+        document.activeElement.blur();
     });
 }
 
