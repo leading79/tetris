@@ -18,6 +18,7 @@ const gameOverScreen = document.getElementById('game-over-screen');
 const startBtn = document.getElementById('start-btn');
 const resumeBtn = document.getElementById('resume-btn');
 const restartBtn = document.getElementById('restart-btn');
+const resumeGameBtn = document.getElementById('resume-game-btn');
 
 // Game Constants
 const BOARD_WIDTH = 10;
@@ -83,6 +84,7 @@ let bag = [];
 let score = 0;
 let level = 1;
 let lines = 0;
+let highScore = parseInt(localStorage.getItem('tetris_highScore')) || 0;
 
 let dropCounter = 0;
 let lastTime = 0;
@@ -155,6 +157,8 @@ function spawnPiece() {
     // Check game over right away
     if (collide(board, activePiece)) {
         changeGameState('gameover');
+    } else {
+        saveGame();
     }
     
     drawNextPiece();
@@ -338,6 +342,7 @@ function performLineClear() {
     level = Math.floor(lines / 10) + 1;
     
     updateHUD();
+    saveGame();
 }
 
 function getDropInterval() {
@@ -531,6 +536,15 @@ function updateHUD() {
     scoreVal.innerText = score.toLocaleString();
     levelVal.innerText = level;
     linesVal.innerText = lines;
+    
+    if (score > highScore) {
+        highScore = score;
+        localStorage.setItem('tetris_highScore', highScore);
+    }
+    const highScoreVal = document.getElementById('high-score-val');
+    if (highScoreVal) {
+        highScoreVal.innerText = highScore.toLocaleString();
+    }
 }
 
 // ----------------------------------------
@@ -547,11 +561,14 @@ function changeGameState(newState) {
     
     if (newState === 'start') {
         startScreen.classList.add('active');
+        checkSavedGame();
     } else if (newState === 'paused') {
         pauseScreen.classList.add('active');
+        saveGame();
     } else if (newState === 'gameover') {
         finalScore.innerText = score.toLocaleString();
         gameOverScreen.classList.add('active');
+        clearSave();
     }
 }
 
@@ -565,6 +582,7 @@ function startGame() {
     activePiece = null;
     isClearing = false;
     
+    clearSave();
     updateHUD();
     spawnPiece();
     changeGameState('playing');
@@ -652,10 +670,75 @@ window.addEventListener('keydown', event => {
     }
 });
 
+// LocalStorage Save & Load Helper Functions
+function saveGame() {
+    if (gameState !== 'playing' && gameState !== 'paused') return;
+    const state = {
+        board,
+        score,
+        level,
+        lines,
+        activePiece,
+        nextPiece,
+        bag
+    };
+    localStorage.setItem('tetris_gameState', JSON.stringify(state));
+}
+
+function clearSave() {
+    localStorage.removeItem('tetris_gameState');
+    if (resumeGameBtn) {
+        resumeGameBtn.style.display = 'none';
+    }
+}
+
+function checkSavedGame() {
+    const saved = localStorage.getItem('tetris_gameState');
+    if (saved && resumeGameBtn) {
+        resumeGameBtn.style.display = 'block';
+    } else if (resumeGameBtn) {
+        resumeGameBtn.style.display = 'none';
+    }
+}
+
+function resumeGame() {
+    const saved = localStorage.getItem('tetris_gameState');
+    if (!saved) return;
+    
+    try {
+        const state = JSON.parse(saved);
+        board = state.board;
+        score = state.score;
+        level = state.level;
+        lines = state.lines;
+        activePiece = state.activePiece;
+        nextPiece = state.nextPiece;
+        bag = state.bag;
+        
+        updateHUD();
+        drawNextPiece();
+        changeGameState('playing');
+        
+        lastTime = performance.now();
+        requestAnimationFrame(update);
+    } catch (e) {
+        console.error("Failed to load saved game state:", e);
+        clearSave();
+    }
+}
+
 // Button triggers
 startBtn.addEventListener('click', startGame);
 resumeBtn.addEventListener('click', togglePause);
 restartBtn.addEventListener('click', startGame);
+if (resumeGameBtn) {
+    resumeGameBtn.addEventListener('click', resumeGame);
+}
+
+// Autosave on window close or reload
+window.addEventListener('beforeunload', () => {
+    saveGame();
+});
 
 // Initialize visual view on load
 changeGameState('start');

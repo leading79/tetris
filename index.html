@@ -30,7 +30,10 @@
                 <div id="start-screen" class="overlay active">
                     <h2 class="neon-text-cyan glow-animate">READY PLAYER ONE</h2>
                     <p class="description">네온 컬러의 화려한 클래식 테트리스</p>
-                    <button id="start-btn" class="neon-btn btn-cyan">GAME START</button>
+                    <div style="display: flex; flex-direction: column; gap: 10px; align-items: center;">
+                        <button id="start-btn" class="neon-btn btn-cyan">GAME START</button>
+                        <button id="resume-game-btn" class="neon-btn btn-yellow" style="display: none;">RESUME GAME</button>
+                    </div>
                 </div>
 
                 <!-- Pause Screen -->
@@ -63,6 +66,11 @@
 
                 <!-- Score and Level Status -->
                 <div class="panel glass-container">
+                    <div class="stat-box">
+                        <span class="stat-label">HIGH SCORE</span>
+                        <span id="high-score-val" class="stat-value neon-text-green">0</span>
+                    </div>
+                    <div class="stat-divider"></div>
                     <div class="stat-box">
                         <span class="stat-label">SCORE</span>
                         <span id="score-val" class="stat-value neon-text-cyan">0</span>
