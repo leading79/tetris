@@ -50,6 +50,33 @@
                         <p>FINAL SCORE</p>
                         <span id="final-score">0</span>
                     </div>
+
+                    <!-- Top 10 Entry -->
+                    <div id="leaderboard-input-area" style="display: none; margin-bottom: 10px;">
+                        <p class="neon-text-cyan glow-animate" style="font-size: 0.75rem; letter-spacing: 2px; margin-bottom: 5px;">NEW HIGH SCORE ENTRY!</p>
+                        <div class="name-input-group">
+                            <input type="text" id="player-name-input" maxlength="10" placeholder="ENTER NAME" style="text-transform: uppercase;" />
+                            <button id="save-score-btn" class="neon-btn btn-cyan" style="padding: 8px 18px; font-size: 0.75rem;">SAVE</button>
+                        </div>
+                    </div>
+
+                    <!-- Top 10 Rankings Board -->
+                    <div id="leaderboard-display-area" style="width: 100%; max-height: 200px; overflow-y: auto; margin: 10px 0;">
+                        <h3 class="neon-text-yellow" style="font-size: 0.85rem; letter-spacing: 3px; margin-bottom: 5px;">TOP 10 RANKINGS</h3>
+                        <table class="leaderboard-table">
+                            <thead>
+                                <tr>
+                                    <th>RANK</th>
+                                    <th>NAME</th>
+                                    <th>SCORE</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-list">
+                                <!-- JavaScript appends rows here -->
+                            </tbody>
+                        </table>
+                    </div>
+
                     <button id="restart-btn" class="neon-btn btn-magenta">PLAY AGAIN</button>
                 </div>
             </div>

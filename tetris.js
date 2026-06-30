@@ -20,6 +20,12 @@ const resumeBtn = document.getElementById('resume-btn');
 const restartBtn = document.getElementById('restart-btn');
 const resumeGameBtn = document.getElementById('resume-game-btn');
 
+// Leaderboard DOM elements
+const leaderboardInputArea = document.getElementById('leaderboard-input-area');
+const playerNameInput = document.getElementById('player-name-input');
+const saveScoreBtn = document.getElementById('save-score-btn');
+const leaderboardList = document.getElementById('leaderboard-list');
+
 // Game Constants
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
@@ -85,6 +91,7 @@ let score = 0;
 let level = 1;
 let lines = 0;
 let highScore = parseInt(localStorage.getItem('tetris_highScore')) || 0;
+let leaderboard = JSON.parse(localStorage.getItem('tetris_leaderboard')) || [];
 
 let dropCounter = 0;
 let lastTime = 0;
@@ -569,6 +576,18 @@ function changeGameState(newState) {
         finalScore.innerText = score.toLocaleString();
         gameOverScreen.classList.add('active');
         clearSave();
+        
+        // Render rankings and handle input area visibility
+        renderLeaderboard();
+        if (checkLeaderboardEligibility(score)) {
+            if (leaderboardInputArea) leaderboardInputArea.style.display = 'block';
+            if (playerNameInput) {
+                playerNameInput.value = '';
+                setTimeout(() => playerNameInput.focus(), 150);
+            }
+        } else {
+            if (leaderboardInputArea) leaderboardInputArea.style.display = 'none';
+        }
     }
 }
 
@@ -727,12 +746,91 @@ function resumeGame() {
     }
 }
 
+// Leaderboard helper functions
+function checkLeaderboardEligibility(score) {
+    if (score <= 0) return false;
+    if (leaderboard.length < 10) return true;
+    return score > leaderboard[leaderboard.length - 1].score;
+}
+
+function renderLeaderboard(highlightedIndex = -1) {
+    if (!leaderboardList) return;
+    leaderboardList.innerHTML = '';
+    
+    if (leaderboard.length === 0) {
+        leaderboardList.innerHTML = `<tr><td colspan="3" style="color: #606070; text-align: center; padding: 15px 0;">NO RECORDS YET</td></tr>`;
+        return;
+    }
+    
+    leaderboard.forEach((entry, idx) => {
+        const isHighlight = idx === highlightedIndex;
+        const tr = document.createElement('tr');
+        if (isHighlight) tr.classList.add('highlight');
+        tr.innerHTML = `
+            <td>${idx + 1}</td>
+            <td>${entry.name}</td>
+            <td>${entry.score.toLocaleString()}</td>
+        `;
+        leaderboardList.appendChild(tr);
+    });
+}
+
+function handleRestartAttempt() {
+    const isEligible = leaderboardInputArea && leaderboardInputArea.style.display !== 'none';
+    if (isEligible) {
+        const leaveWithoutSaving = confirm("점수를 저장하지 않고 새 게임을 시작하시겠습니까?");
+        if (!leaveWithoutSaving) {
+            if (playerNameInput) playerNameInput.focus();
+            return;
+        }
+    }
+    startGame();
+}
+
 // Button triggers
 startBtn.addEventListener('click', startGame);
 resumeBtn.addEventListener('click', togglePause);
-restartBtn.addEventListener('click', startGame);
+restartBtn.addEventListener('click', handleRestartAttempt);
 if (resumeGameBtn) {
     resumeGameBtn.addEventListener('click', resumeGame);
+}
+
+if (saveScoreBtn) {
+    saveScoreBtn.addEventListener('click', () => {
+        if (!playerNameInput) return;
+        let name = playerNameInput.value.trim().toUpperCase();
+        
+        const regex = /^[A-Z]{1,10}$/;
+        if (!regex.test(name)) {
+            alert("영문 10자 이내로 입력해주세요 (공백 제외).");
+            return;
+        }
+        
+        // Save score
+        leaderboard.push({ name, score });
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard = leaderboard.slice(0, 10);
+        localStorage.setItem('tetris_leaderboard', JSON.stringify(leaderboard));
+        
+        const newIdx = leaderboard.findIndex(entry => entry.name === name && entry.score === score);
+        
+        if (leaderboardInputArea) {
+            leaderboardInputArea.style.display = 'none';
+        }
+        renderLeaderboard(newIdx);
+    });
+}
+
+if (playerNameInput) {
+    playerNameInput.addEventListener('input', () => {
+        playerNameInput.value = playerNameInput.value.replace(/[^a-zA-Z]/g, '').toUpperCase();
+    });
+    playerNameInput.addEventListener('keydown', (event) => {
+        if (event.key === 'Enter') {
+            if (saveScoreBtn) saveScoreBtn.click();
+            event.preventDefault();
+        }
+    });
 }
 
 // Autosave on window close or reload

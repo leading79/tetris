@@ -428,3 +428,58 @@ footer {
         display: none; /* Hide keyboard controls map on mobile-ish layouts */
     }
 }
+
+/* Leaderboard Accents */
+.name-input-group {
+    display: flex;
+    gap: 8px;
+    justify-content: center;
+    align-items: center;
+    margin: 8px 0;
+}
+
+#player-name-input {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid var(--color-border-glass);
+    border-radius: 20px;
+    padding: 8px 14px;
+    color: #fff;
+    font-family: var(--font-display);
+    font-size: 0.8rem;
+    text-align: center;
+    outline: none;
+    transition: all 0.3s ease;
+    width: 130px;
+}
+
+#player-name-input:focus {
+    border-color: var(--neon-cyan);
+    box-shadow: 0 0 10px rgba(0, 242, 254, 0.3);
+}
+
+.leaderboard-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: var(--font-display);
+    font-size: 0.75rem;
+    text-align: center;
+    color: #a0a0b0;
+}
+
+.leaderboard-table th, 
+.leaderboard-table td {
+    padding: 5px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.03);
+}
+
+.leaderboard-table th {
+    font-size: 0.65rem;
+    color: #606070;
+    letter-spacing: 2px;
+}
+
+.leaderboard-table tr.highlight {
+    color: var(--neon-cyan);
+    font-weight: 700;
+    text-shadow: var(--glow-cyan);
+}
