@@ -16,12 +16,20 @@
     <div class="glow-bg glow-magenta"></div>
 
     <div class="game-wrapper">
-        <header>
-            <h1 class="logo">NEON <span class="neon-text-magenta">TETRIS</span></h1>
-        </header>
-
         <main class="game-container">
-            <!-- Left Side: Game Board inside a glass container -->
+            
+            <!-- Left Panel: Header and Footer -->
+            <div class="left-panel-area glass-container" style="display: flex; flex-direction: column; justify-content: space-between; padding: 25px 20px; text-align: center;">
+                <header>
+                    <h1 class="logo" style="font-size: 2.2rem; line-height: 1.2;">NEON<br><span class="neon-text-magenta">TETRIS</span></h1>
+                    <p class="neon-text-cyan glow-animate" style="font-size: 0.85rem; margin-top: 20px; letter-spacing: 2px;">CLASSIC ARCADE</p>
+                </header>
+                <footer>
+                    <p style="font-size: 0.75rem; color: #a0a0b0; line-height: 1.5; font-family: var(--font-ui);">Antigravity<br>Neon Tetris &copy; 2026</p>
+                </footer>
+            </div>
+
+            <!-- Center Side: Game Board inside a glass container -->
             <div class="board-area glass-container">
                 <canvas id="game-board" width="300" height="600"></canvas>
                 
@@ -135,10 +143,6 @@
                 </div>
             </div>
         </main>
-        
-        <footer>
-            <p>Antigravity Neon Tetris © 2026</p>
-        </footer>
     </div>
 
     <!-- Deferred Javascript load -->

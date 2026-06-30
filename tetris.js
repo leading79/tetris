@@ -787,12 +787,19 @@ function handleRestartAttempt() {
     startGame();
 }
 
+// Remove focus immediately after any UI button interaction to prevent Enter key double-trigger bugs
+function blurActiveElement() {
+    if (document.activeElement && document.activeElement.tagName === 'BUTTON') {
+        document.activeElement.blur();
+    }
+}
+
 // Button triggers
-startBtn.addEventListener('click', startGame);
-resumeBtn.addEventListener('click', togglePause);
-restartBtn.addEventListener('click', handleRestartAttempt);
+startBtn.addEventListener('click', () => { startGame(); blurActiveElement(); });
+resumeBtn.addEventListener('click', () => { togglePause(); blurActiveElement(); });
+restartBtn.addEventListener('click', () => { handleRestartAttempt(); blurActiveElement(); });
 if (resumeGameBtn) {
-    resumeGameBtn.addEventListener('click', resumeGame);
+    resumeGameBtn.addEventListener('click', () => { resumeGame(); blurActiveElement(); });
 }
 
 if (saveScoreBtn) {

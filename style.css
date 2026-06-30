@@ -91,12 +91,14 @@ body {
 /* Wrapper Layout */
 .game-wrapper {
     display: flex;
-    flex-direction: column;
+    justify-content: center;
     align-items: center;
-    gap: 20px;
     width: 100%;
-    max-width: 650px;
-    padding: 20px;
+    max-width: 900px;
+    height: 100dvh;
+    padding: 10px;
+    box-sizing: border-box;
+    overflow: hidden;
 }
 
 header {
@@ -146,18 +148,22 @@ header {
 /* Main Game Layout Grid */
 .game-container {
     display: grid;
-    grid-template-columns: auto 200px;
+    grid-template-columns: 200px auto 200px;
     gap: 20px;
     width: 100%;
+    height: 100%;
+    max-height: 100%;
 }
 
-/* Left Area: Board & Overlays */
+/* Center Area: Board & Overlays */
 .board-area {
     position: relative;
     padding: 10px;
     display: flex;
     justify-content: center;
     align-items: center;
+    height: 100%;
+    max-height: 640px;
 }
 
 #game-board {
@@ -165,6 +171,10 @@ header {
     background-color: rgba(5, 5, 10, 0.85);
     border-radius: 8px;
     box-shadow: inset 0 0 20px rgba(0, 0, 0, 0.8);
+    height: 100%;
+    max-height: 600px;
+    width: auto;
+    aspect-ratio: 1 / 2;
 }
 
 /* Game Screens Overlays */
@@ -409,12 +419,40 @@ footer {
 }
 
 /* Responsiveness for Smaller Screen Heights/Widths */
-@media (max-width: 600px) {
+@media (max-width: 850px) {
+    .game-wrapper {
+        height: auto;
+        overflow: visible;
+        padding: 20px 10px;
+    }
+
     .game-container {
         grid-template-columns: 1fr;
         gap: 15px;
     }
     
+    .left-panel-area {
+        flex-direction: row !important;
+        align-items: center;
+        padding: 15px 20px !important;
+    }
+
+    .left-panel-area header {
+        text-align: left;
+    }
+
+    .left-panel-area header h1.logo {
+        font-size: 1.8rem !important;
+    }
+
+    .left-panel-area header p {
+        margin-top: 5px !important;
+    }
+    
+    .left-panel-area footer {
+        display: none; /* Hide footer on mobile/narrow layouts */
+    }
+
     .side-panel-area {
         flex-direction: row;
         flex-wrap: wrap;
